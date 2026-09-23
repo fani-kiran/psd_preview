@@ -426,3 +426,238 @@
 [Photoshop] Plugin connected. Active PS clients: 1
 [Mobile] Android connected (mob_1790169610810_5kkru). Total mobile clients: 1
 [Mobile] Client disconnected (mob_1790169610810_5kkru). Remaining: 0
+
+================================================================
+       PHOTOSHOP MOBILE PREVIEW - USB BRIDGE SERVER             
+================================================================
+ Server running on port 3890
+
+--- USB CONNECTION OPTIONS (No USB Debugging Needed!) ---
+
+[Android USB - How to Connect]:
+  1. Connect USB cable from Android phone to Mac.
+  2. On Android, go to Settings > Network & internet > Hotspot & tethering.
+  3. Turn ON "USB tethering". (No USB debugging needed!)
+  4. Open: http://00386I-FANI.local:3890 in Chrome.
+
+[iPhone USB - How to Connect]:
+  1. Connect USB cable from iPhone to Mac.
+  2. On iPhone, go to Settings > Personal Hotspot and choose "USB Only".
+  3. Open: http://00386I-FANI.local:3890 in Safari.
+  4. Tap Share > "Add to Home Screen" for true borderless fullscreen.
+
+[Local / Wi-Fi Fallback URLs]:
+  -> en0: http://192.168.1.206:3890
+  -> utun4: http://10.99.115.44:3890
+
+[Direct URL]: http://00386I-FANI.local:3890
+
+[Scan with Phone Camera to Open]:
+[47m[30m ▄▄▄▄▄▄▄ ▄▄▄▄▄  ▄▄ ▄ ▄ ▄▄▄▄▄▄▄ [0m
+[47m[30m █ ▄▄▄ █ ▀▄█ ▀▄██ ▄▄▀█ █ ▄▄▄ █ [0m
+[47m[30m █ ███ █ ▀▄▀▀█▄  ▀█▀ █ █ ███ █ [0m
+[47m[30m █▄▄▄▄▄█ ▄ █ ▄ █ ▄ ▄▀▄ █▄▄▄▄▄█ [0m
+[47m[30m ▄ ▄▄ ▄▄▄▀▀▄█ ██ ▄▀▀█▄ ▄  ▄ ▄▄ [0m
+[47m[30m   ▀ ▀▀▄█▀  ██ ▄█▀▄▀▀▄▄▀ ▀ ▄▄▀ [0m
+[47m[30m ▄▀█▄ ▄▄▄▀██▄▀▀▀▀▄ █ █▀▀█ ▀▄ ▀ [0m
+[47m[30m ▀▀▀▄ ▀▄█▄▄ █▄▀▄   ▀▀ ▀ █▄▄▀██ [0m
+[47m[30m ▀█ ▄█ ▄ ▀▀█▄▄▀ ▀ ▄█▀█ ▀▀██ █  [0m
+[47m[30m ▄▀ █ ▀▄▄▀▀▄▀█▀    ██▀ ▀ █▄█▀  [0m
+[47m[30m  ▄▄█▄▀▄▀ ██  ▄ █▀▀ █▄██▄██▄   [0m
+[47m[30m ▄▄▄▄▄▄▄ ██ █ █▀▀▄▀█▄█ ▄ ██ █▀ [0m
+[47m[30m █ ▄▄▄ █ ▀██▄  ▄▄▀▀  █▄▄▄█▄█ ▀ [0m
+[47m[30m █ ███ █ █▄▄▄ ▀█▄█▀ ▄▀▀ ▀  ▀ ▄ [0m
+[47m[30m █▄▄▄▄▄█ ▄▄█▀ ▄▄▄█▄ ▄▄▀█▄▀▀▀█  [0m
+[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m
+[47m[30m[0m
+================================================================
+
+
+================================================================
+       PHOTOSHOP MOBILE PREVIEW - USB BRIDGE SERVER             
+================================================================
+ Server running on port 3890
+
+--- USB CONNECTION OPTIONS (No USB Debugging Needed!) ---
+
+[Android USB - How to Connect]:
+  1. Connect USB cable from Android phone to Mac.
+  2. On Android, go to Settings > Network & internet > Hotspot & tethering.
+  3. Turn ON "USB tethering". (No USB debugging needed!)
+  4. Open: http://00386I-FANI.local:3890 in Chrome.
+
+[iPhone USB - How to Connect]:
+  1. Connect USB cable from iPhone to Mac.
+  2. On iPhone, go to Settings > Personal Hotspot and choose "USB Only".
+  3. Open: http://00386I-FANI.local:3890 in Safari.
+  4. Tap Share > "Add to Home Screen" for true borderless fullscreen.
+
+[Local / Wi-Fi Fallback URLs]:
+  -> en0: http://192.168.1.206:3890
+  -> utun4: http://10.99.115.44:3890
+
+[Direct URL]: http://00386I-FANI.local:3890
+
+[Scan with Phone Camera to Open]:
+[47m[30m ▄▄▄▄▄▄▄ ▄▄▄▄▄  ▄▄ ▄ ▄ ▄▄▄▄▄▄▄ [0m
+[47m[30m █ ▄▄▄ █ ▀▄█ ▀▄██ ▄▄▀█ █ ▄▄▄ █ [0m
+[47m[30m █ ███ █ ▀▄▀▀█▄  ▀█▀ █ █ ███ █ [0m
+[47m[30m █▄▄▄▄▄█ ▄ █ ▄ █ ▄ ▄▀▄ █▄▄▄▄▄█ [0m
+[47m[30m ▄ ▄▄ ▄▄▄▀▀▄█ ██ ▄▀▀█▄ ▄  ▄ ▄▄ [0m
+[47m[30m   ▀ ▀▀▄█▀  ██ ▄█▀▄▀▀▄▄▀ ▀ ▄▄▀ [0m
+[47m[30m ▄▀█▄ ▄▄▄▀██▄▀▀▀▀▄ █ █▀▀█ ▀▄ ▀ [0m
+[47m[30m ▀▀▀▄ ▀▄█▄▄ █▄▀▄   ▀▀ ▀ █▄▄▀██ [0m
+[47m[30m ▀█ ▄█ ▄ ▀▀█▄▄▀ ▀ ▄█▀█ ▀▀██ █  [0m
+[47m[30m ▄▀ █ ▀▄▄▀▀▄▀█▀    ██▀ ▀ █▄█▀  [0m
+[47m[30m  ▄▄█▄▀▄▀ ██  ▄ █▀▀ █▄██▄██▄   [0m
+[47m[30m ▄▄▄▄▄▄▄ ██ █ █▀▀▄▀█▄█ ▄ ██ █▀ [0m
+[47m[30m █ ▄▄▄ █ ▀██▄  ▄▄▀▀  █▄▄▄█▄█ ▀ [0m
+[47m[30m █ ███ █ █▄▄▄ ▀█▄█▀ ▄▀▀ ▀  ▀ ▄ [0m
+[47m[30m █▄▄▄▄▄█ ▄▄█▀ ▄▄▄█▄ ▄▄▀█▄▀▀▀█  [0m
+[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m
+[47m[30m[0m
+================================================================
+
+
+================================================================
+       PHOTOSHOP MOBILE PREVIEW - USB BRIDGE SERVER             
+================================================================
+ Server running on port 3890
+
+--- USB CONNECTION OPTIONS (No USB Debugging Needed!) ---
+
+[Android USB - How to Connect]:
+  1. Connect USB cable from Android phone to Mac.
+  2. On Android, go to Settings > Network & internet > Hotspot & tethering.
+  3. Turn ON "USB tethering". (No USB debugging needed!)
+  4. Open: http://00386I-FANI.local:3890 in Chrome.
+
+[iPhone USB - How to Connect]:
+  1. Connect USB cable from iPhone to Mac.
+  2. On iPhone, go to Settings > Personal Hotspot and choose "USB Only".
+  3. Open: http://00386I-FANI.local:3890 in Safari.
+  4. Tap Share > "Add to Home Screen" for true borderless fullscreen.
+
+[Local / Wi-Fi Fallback URLs]:
+  -> en0: http://192.168.1.206:3890
+  -> utun4: http://10.99.115.44:3890
+
+[Direct URL]: http://00386I-FANI.local:3890
+
+[Scan with Phone Camera to Open]:
+[47m[30m ▄▄▄▄▄▄▄ ▄▄▄▄▄  ▄▄ ▄ ▄ ▄▄▄▄▄▄▄ [0m
+[47m[30m █ ▄▄▄ █ ▀▄█ ▀▄██ ▄▄▀█ █ ▄▄▄ █ [0m
+[47m[30m █ ███ █ ▀▄▀▀█▄  ▀█▀ █ █ ███ █ [0m
+[47m[30m █▄▄▄▄▄█ ▄ █ ▄ █ ▄ ▄▀▄ █▄▄▄▄▄█ [0m
+[47m[30m ▄ ▄▄ ▄▄▄▀▀▄█ ██ ▄▀▀█▄ ▄  ▄ ▄▄ [0m
+[47m[30m   ▀ ▀▀▄█▀  ██ ▄█▀▄▀▀▄▄▀ ▀ ▄▄▀ [0m
+[47m[30m ▄▀█▄ ▄▄▄▀██▄▀▀▀▀▄ █ █▀▀█ ▀▄ ▀ [0m
+[47m[30m ▀▀▀▄ ▀▄█▄▄ █▄▀▄   ▀▀ ▀ █▄▄▀██ [0m
+[47m[30m ▀█ ▄█ ▄ ▀▀█▄▄▀ ▀ ▄█▀█ ▀▀██ █  [0m
+[47m[30m ▄▀ █ ▀▄▄▀▀▄▀█▀    ██▀ ▀ █▄█▀  [0m
+[47m[30m  ▄▄█▄▀▄▀ ██  ▄ █▀▀ █▄██▄██▄   [0m
+[47m[30m ▄▄▄▄▄▄▄ ██ █ █▀▀▄▀█▄█ ▄ ██ █▀ [0m
+[47m[30m █ ▄▄▄ █ ▀██▄  ▄▄▀▀  █▄▄▄█▄█ ▀ [0m
+[47m[30m █ ███ █ █▄▄▄ ▀█▄█▀ ▄▀▀ ▀  ▀ ▄ [0m
+[47m[30m █▄▄▄▄▄█ ▄▄█▀ ▄▄▄█▄ ▄▄▀█▄▀▀▀█  [0m
+[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m
+[47m[30m[0m
+================================================================
+
+
+================================================================
+       PHOTOSHOP MOBILE PREVIEW - USB BRIDGE SERVER             
+================================================================
+ Server running on port 3890
+
+--- USB CONNECTION OPTIONS (No USB Debugging Needed!) ---
+
+[Android USB - How to Connect]:
+  1. Connect USB cable from Android phone to Mac.
+  2. On Android, go to Settings > Network & internet > Hotspot & tethering.
+  3. Turn ON "USB tethering". (No USB debugging needed!)
+  4. Open: http://00386I-FANI.local:3890 in Chrome.
+
+[iPhone USB - How to Connect]:
+  1. Connect USB cable from iPhone to Mac.
+  2. On iPhone, go to Settings > Personal Hotspot and choose "USB Only".
+  3. Open: http://00386I-FANI.local:3890 in Safari.
+  4. Tap Share > "Add to Home Screen" for true borderless fullscreen.
+
+[Local / Wi-Fi Fallback URLs]:
+  -> en0: http://192.168.1.206:3890
+  -> utun4: http://10.99.115.44:3890
+
+[Direct URL]: http://00386I-FANI.local:3890
+
+[Scan with Phone Camera to Open]:
+[47m[30m ▄▄▄▄▄▄▄ ▄▄▄▄▄  ▄▄ ▄ ▄ ▄▄▄▄▄▄▄ [0m
+[47m[30m █ ▄▄▄ █ ▀▄█ ▀▄██ ▄▄▀█ █ ▄▄▄ █ [0m
+[47m[30m █ ███ █ ▀▄▀▀█▄  ▀█▀ █ █ ███ █ [0m
+[47m[30m █▄▄▄▄▄█ ▄ █ ▄ █ ▄ ▄▀▄ █▄▄▄▄▄█ [0m
+[47m[30m ▄ ▄▄ ▄▄▄▀▀▄█ ██ ▄▀▀█▄ ▄  ▄ ▄▄ [0m
+[47m[30m   ▀ ▀▀▄█▀  ██ ▄█▀▄▀▀▄▄▀ ▀ ▄▄▀ [0m
+[47m[30m ▄▀█▄ ▄▄▄▀██▄▀▀▀▀▄ █ █▀▀█ ▀▄ ▀ [0m
+[47m[30m ▀▀▀▄ ▀▄█▄▄ █▄▀▄   ▀▀ ▀ █▄▄▀██ [0m
+[47m[30m ▀█ ▄█ ▄ ▀▀█▄▄▀ ▀ ▄█▀█ ▀▀██ █  [0m
+[47m[30m ▄▀ █ ▀▄▄▀▀▄▀█▀    ██▀ ▀ █▄█▀  [0m
+[47m[30m  ▄▄█▄▀▄▀ ██  ▄ █▀▀ █▄██▄██▄   [0m
+[47m[30m ▄▄▄▄▄▄▄ ██ █ █▀▀▄▀█▄█ ▄ ██ █▀ [0m
+[47m[30m █ ▄▄▄ █ ▀██▄  ▄▄▀▀  █▄▄▄█▄█ ▀ [0m
+[47m[30m █ ███ █ █▄▄▄ ▀█▄█▀ ▄▀▀ ▀  ▀ ▄ [0m
+[47m[30m █▄▄▄▄▄█ ▄▄█▀ ▄▄▄█▄ ▄▄▀█▄▀▀▀█  [0m
+[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m
+[47m[30m[0m
+================================================================
+
+[Photoshop] Plugin connected. Active PS clients: 1
+[Photoshop] Plugin disconnected (code: 1000). Remaining PS clients: 0
+[Photoshop] Plugin connected. Active PS clients: 1
+[Photoshop] Plugin disconnected (code: 1000). Remaining PS clients: 0
+
+================================================================
+       PHOTOSHOP MOBILE PREVIEW - USB BRIDGE SERVER             
+================================================================
+ Server running on port 3890
+
+--- USB CONNECTION OPTIONS (No USB Debugging Needed!) ---
+
+[Android USB - How to Connect]:
+  1. Connect USB cable from Android phone to Mac.
+  2. On Android, go to Settings > Network & internet > Hotspot & tethering.
+  3. Turn ON "USB tethering". (No USB debugging needed!)
+  4. Open: http://00386I-FANI.local:3890 in Chrome.
+
+[iPhone USB - How to Connect]:
+  1. Connect USB cable from iPhone to Mac.
+  2. On iPhone, go to Settings > Personal Hotspot and choose "USB Only".
+  3. Open: http://00386I-FANI.local:3890 in Safari.
+  4. Tap Share > "Add to Home Screen" for true borderless fullscreen.
+
+[Local / Wi-Fi Fallback URLs]:
+  -> en0: http://192.168.1.206:3890
+  -> utun4: http://10.99.115.44:3890
+
+[Direct URL]: http://00386I-FANI.local:3890
+
+[Scan with Phone Camera to Open]:
+[47m[30m ▄▄▄▄▄▄▄ ▄▄▄▄▄  ▄▄ ▄ ▄ ▄▄▄▄▄▄▄ [0m
+[47m[30m █ ▄▄▄ █ ▀▄█ ▀▄██ ▄▄▀█ █ ▄▄▄ █ [0m
+[47m[30m █ ███ █ ▀▄▀▀█▄  ▀█▀ █ █ ███ █ [0m
+[47m[30m █▄▄▄▄▄█ ▄ █ ▄ █ ▄ ▄▀▄ █▄▄▄▄▄█ [0m
+[47m[30m ▄ ▄▄ ▄▄▄▀▀▄█ ██ ▄▀▀█▄ ▄  ▄ ▄▄ [0m
+[47m[30m   ▀ ▀▀▄█▀  ██ ▄█▀▄▀▀▄▄▀ ▀ ▄▄▀ [0m
+[47m[30m ▄▀█▄ ▄▄▄▀██▄▀▀▀▀▄ █ █▀▀█ ▀▄ ▀ [0m
+[47m[30m ▀▀▀▄ ▀▄█▄▄ █▄▀▄   ▀▀ ▀ █▄▄▀██ [0m
+[47m[30m ▀█ ▄█ ▄ ▀▀█▄▄▀ ▀ ▄█▀█ ▀▀██ █  [0m
+[47m[30m ▄▀ █ ▀▄▄▀▀▄▀█▀    ██▀ ▀ █▄█▀  [0m
+[47m[30m  ▄▄█▄▀▄▀ ██  ▄ █▀▀ █▄██▄██▄   [0m
+[47m[30m ▄▄▄▄▄▄▄ ██ █ █▀▀▄▀█▄█ ▄ ██ █▀ [0m
+[47m[30m █ ▄▄▄ █ ▀██▄  ▄▄▀▀  █▄▄▄█▄█ ▀ [0m
+[47m[30m █ ███ █ █▄▄▄ ▀█▄█▀ ▄▀▀ ▀  ▀ ▄ [0m
+[47m[30m █▄▄▄▄▄█ ▄▄█▀ ▄▄▄█▄ ▄▄▀█▄▀▀▀█  [0m
+[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m[37m▀[47m[30m[0m
+[47m[30m[0m
+================================================================
+
+[Photoshop] Plugin connected. Active PS clients: 1

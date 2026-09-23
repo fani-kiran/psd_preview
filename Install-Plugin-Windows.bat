@@ -20,13 +20,36 @@ if %ERRORLEVEL% equ 0 (
 )
 
 echo.
-echo ==========================================================
-echo  [SUCCESS] Plugin installed and registered successfully!
-echo  Installed to: %TARGET_DIR%
+echo --> Checking server dependencies...
+if not exist "bridge-server\node_modules\" (
+  echo Installing bridge server dependencies...
+  cd bridge-server
+  call npm install --no-audit --no-fund
+  cd ..
+)
+
+echo --> Starting Bridge Server in the background...
+if not exist "logs\" mkdir "logs"
+
+netstat -ano | findstr :3890 >nul 2>nul
+if %ERRORLEVEL% equ 0 (
+  echo     [OK] Bridge server is already running on port 3890.
+) else (
+  powershell -Command "Start-Process node -ArgumentList 'bridge-server\server.js' -WorkingDirectory '%~dp0' -WindowStyle Hidden"
+  timeout /t 2 /nobreak >nul 2>nul
+  echo     [OK] Bridge server started in background!
+)
+
 echo.
-echo  IMPORTANT:
+echo ==========================================================
+echo  [SUCCESS] Plugin installed and server started!
+echo  Plugin Directory: %TARGET_DIR%
+echo  Server Status:    RUNNING in background (Port 3890)
+echo.
+echo  NEXT STEPS:
 echo  1. If Photoshop is running, completely QUIT and RESTART Photoshop.
 echo  2. In Photoshop top menu, open: Plugins ^> Mobile USB Preview.
+echo  3. Connect your phone via USB and open the preview URL!
 echo ==========================================================
 pause
 

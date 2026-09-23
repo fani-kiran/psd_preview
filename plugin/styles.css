@@ -52,9 +52,11 @@ body {
 }
 
 .header-icon {
-  width: 16px;
-  height: 16px;
-  color: var(--accent);
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  border-radius: 3px;
+  flex-shrink: 0;
 }
 
 .logo-title h1 {

@@ -59,12 +59,19 @@ if command -v node > /dev/null 2>&1; then
   "
 fi
 
+# 5. Automatically start the background bridge server
 echo ""
 echo "=========================================================="
-echo " [SUCCESS] Plugin installed and registered successfully!"
-echo " Installed to: $TARGET_DIR"
+echo "    Starting USB Bridge Server in Background...           "
+echo "=========================================================="
+"$DIR/start.sh"
+
 echo ""
-echo " IMPORTANT NEXT STEP:"
+echo "=========================================================="
+echo " [SUCCESS] Plugin & Server Setup Complete!"
+echo " Plugin Directory: $TARGET_DIR"
+echo ""
+echo " IMPORTANT NEXT STEPS:"
 if pgrep -i "Photoshop" > /dev/null; then
   echo " ⚠️  Photoshop is currently running!"
   echo "    You MUST QUIT Photoshop (Cmd+Q) and reopen it"
@@ -74,5 +81,7 @@ else
 fi
 echo " 2. In the Photoshop menu bar, open:"
 echo "    Plugins > Mobile USB Preview"
+echo " 3. Connect your phone via USB cable and open the preview URL!"
 echo "=========================================================="
+
 
