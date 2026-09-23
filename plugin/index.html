@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mobile USB Preview</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="panel-container">
+    <!-- Header -->
+    <header class="panel-header">
+      <div class="logo-title">
+        <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="5" y="2" width="14" height="20" rx="3" ry="3"/>
+          <line x1="12" y1="18" x2="12.01" y2="18"/>
+        </svg>
+        <h1>Mobile Preview</h1>
+      </div>
+      <div class="bridge-status" id="bridgeStatusBadge">
+        <span class="status-indicator disconnected" id="bridgeStatusDot"></span>
+        <span class="status-label" id="bridgeStatusText">Bridge Offline</span>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="panel-main">
+      <!-- Active Document Section -->
+      <section class="card doc-card">
+        <div class="card-header">
+          <span class="card-title">Active Document</span>
+          <span class="sync-indicator idle" id="syncIndicator">Idle</span>
+        </div>
+        <div class="doc-info">
+          <div class="doc-name" id="docName">No document opened</div>
+          <div class="doc-specs" id="docSpecs">- × - px | - ppi</div>
+        </div>
+      </section>
+
+      <!-- Connected Mobile Devices -->
+      <section class="card devices-card">
+        <div class="card-header">
+          <span class="card-title">Connected Devices</span>
+          <span class="badge" id="deviceCountBadge">0 Devices</span>
+        </div>
+        <div class="device-list" id="deviceList">
+          <div class="no-devices-msg" id="noDevicesMsg">
+            No phone connected. Connect phone via USB cable below.
+          </div>
+        </div>
+      </section>
+
+      <!-- Sync Controls -->
+      <section class="card controls-card">
+        <div class="control-row">
+          <div class="control-label">
+            <span>Auto-Sync on Edit</span>
+            <small>Updates mobile display as you paint & design</small>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="autoSyncToggle" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="control-row">
+          <div class="control-label">
+            <span>Quality Preset</span>
+          </div>
+          <select id="qualitySelect" class="select-dropdown">
+            <option value="adaptive" selected>Adaptive (Fastest)</option>
+            <option value="high">High Quality (Balanced)</option>
+            <option value="retina">Retina (Crispest)</option>
+          </select>
+        </div>
+
+        <div class="btn-group">
+          <button id="syncNowBtn" class="btn btn-primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+            Sync Now
+          </button>
+        </div>
+      </section>
+
+      <!-- USB Quick Connect -->
+      <section class="card usb-card">
+        <div class="card-header">
+          <span class="card-title">USB Connection (No Debugging)</span>
+        </div>
+
+        <div class="usb-tabs">
+          <button class="tab-btn active" data-tab="androidTab">Android</button>
+          <button class="tab-btn" data-tab="iphoneTab">iPhone</button>
+        </div>
+
+        <!-- Android Guide -->
+        <div class="tab-content active" id="androidTab">
+          <ol class="steps-list">
+            <li>Connect Android to Mac with <strong>USB cable</strong>.</li>
+            <li>Go to <strong>Settings &gt; Hotspot &amp; tethering</strong>.</li>
+            <li>Turn <strong>ON &quot;USB tethering&quot;</strong>.</li>
+            <li>Open the link below in Chrome:</li>
+          </ol>
+        </div>
+
+        <!-- iPhone Guide -->
+        <div class="tab-content" id="iphoneTab">
+          <ol class="steps-list">
+            <li>Connect iPhone to Mac with <strong>USB cable</strong>.</li>
+            <li>Go to <strong>Settings &gt; Personal Hotspot</strong>.</li>
+            <li>Select <strong>&quot;USB Only&quot;</strong>.</li>
+            <li>Open link in Safari &amp; tap <strong>Share &gt; Add to Home Screen</strong>.</li>
+          </ol>
+        </div>
+
+        <!-- Connect URL and QR Box -->
+        <div class="url-box">
+          <input type="text" id="connectUrlInput" readonly value="http://localhost:3890">
+          <button id="copyUrlBtn" class="btn-icon" title="Copy URL">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </button>
+        </div>
+
+        <div class="qr-container">
+          <canvas id="qrCanvas" width="150" height="150"></canvas>
+          <img id="qrImg" src="" alt="QR Code" style="display: none; width: 150px; height: 150px; border-radius: 4px; background: #fff;">
+          <div class="qr-caption">Scan with phone camera to open</div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="panel-footer">
+      <div class="footer-status" id="footerServerText">Bridge Server: 127.0.0.1:3890</div>
+      <button id="reconnectBridgeBtn" class="btn-link">Reconnect</button>
+    </footer>
+  </div>
+
+  <script src="qrcode.min.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "psd-mobile-preview",
+  "version": "1.0.0",
+  "description": "Adobe Photoshop Mobile Preview plugin for Android and iPhone over USB in borderless fullscreen",
+  "scripts": {
+    "start": "node bridge-server/server.js",
+    "package": "node scripts/package-plugin.js",
+    "icons": "node scripts/generate-icons.js"
+  },
+  "keywords": [
+    "photoshop",
+    "uxp",
+    "mobile-preview",
+    "usb",
+    "fullscreen",
+    "android",
+    "iphone"
+  ],
+  "author": "",
+  "license": "MIT"
+}

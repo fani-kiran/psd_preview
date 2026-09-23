@@ -1,0 +1,14 @@
+{
+  "name": "psd-preview-bridge-server",
+  "version": "1.0.0",
+  "description": "USB Bridge and streaming server for Photoshop Mobile Preview",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "qrcode": "^1.5.4",
+    "qrcode-terminal": "^0.12.0",
+    "ws": "^8.18.0"
+  }
+}

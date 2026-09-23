@@ -1,0 +1,54 @@
+{
+  "id": "psdprevw",
+  "name": "Mobile USB Preview",
+  "version": "1.0.0",
+  "main": "index.html",
+  "manifestVersion": 5,
+  "host": {
+    "app": "PS",
+    "minVersion": "24.0.0",
+    "data": {
+      "apiVersion": 2,
+      "addToPluginMenu": true
+    }
+  },
+  "requiredPermissions": {
+    "localFileSystem": "fullAccess",
+    "network": {
+      "domains": "all"
+    },
+    "clipboard": "readAndWrite"
+  },
+  "entrypoints": [
+    {
+      "type": "panel",
+      "id": "mobilePreviewPanel",
+      "label": {
+        "default": "Mobile USB Preview"
+      },
+      "minimumSize": { "width": 280, "height": 380 },
+      "maximumSize": { "width": 800, "height": 1200 },
+      "preferredDockedSize": { "width": 320, "height": 550 },
+      "preferredFloatingSize": { "width": 320, "height": 550 },
+      "icons": [
+        {
+          "width": 23,
+          "height": 23,
+          "path": "icons/icon23.png",
+          "scale": [1, 2],
+          "theme": ["darkest", "dark", "medium", "lightest", "light", "all"]
+        }
+      ]
+    }
+  ],
+  "icons": [
+    {
+      "width": 48,
+      "height": 48,
+      "path": "icons/icon48.png",
+      "scale": [1, 2],
+      "theme": ["darkest", "dark", "medium", "lightest", "light", "all"],
+      "species": ["pluginList"]
+    }
+  ]
+}
