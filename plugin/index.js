@@ -194,7 +194,11 @@
 
   // --- Device List UI Update ---
   function updateDeviceList(count, devices) {
-    deviceCountBadge.textContent = `${count} ${count === 1 ? 'Device' : 'Devices'}`;
+    if (deviceCountBadge) {
+      deviceCountBadge.textContent = `${count} ${count === 1 ? 'Device' : 'Devices'}`;
+    }
+
+    if (!deviceList) return;
 
     if (!devices || devices.length === 0) {
       deviceList.innerHTML = `<div class="no-devices-msg">No phone connected. Connect phone via USB cable below.</div>`;
@@ -235,8 +239,8 @@
 
     const doc = photoshop.app.activeDocument;
     if (!doc) {
-      docName.textContent = 'No document opened';
-      docSpecs.textContent = '- × - px | - ppi';
+      if (docName) docName.textContent = 'No document opened';
+      if (docSpecs) docSpecs.textContent = '- × - px | - ppi';
       if (ws && ws.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify({ type: 'doc_closed' }));
       }
@@ -244,11 +248,13 @@
     }
 
     isSyncing = true;
-    syncIndicator.className = 'sync-indicator syncing';
-    syncIndicator.textContent = 'Syncing...';
+    if (syncIndicator) {
+      syncIndicator.className = 'sync-indicator syncing';
+      syncIndicator.textContent = 'Syncing...';
+    }
 
-    docName.textContent = doc.title || doc.name || 'Untitled';
-    docSpecs.textContent = `${doc.width} × ${doc.height} px | ${Math.round(doc.resolution)} ppi`;
+    if (docName) docName.textContent = doc.title || doc.name || 'Untitled';
+    if (docSpecs) docSpecs.textContent = `${doc.width} × ${doc.height} px | ${Math.round(doc.resolution)} ppi`;
 
     try {
       await photoshop.core.executeAsModal(async () => {
@@ -301,8 +307,10 @@
       console.warn('Sync error:', err);
     } finally {
       isSyncing = false;
-      syncIndicator.className = 'sync-indicator idle';
-      syncIndicator.textContent = 'Synced';
+      if (syncIndicator) {
+        syncIndicator.className = 'sync-indicator idle';
+        syncIndicator.textContent = 'Synced';
+      }
 
       if (pendingSync) {
         pendingSync = false;
@@ -312,10 +320,12 @@
   }
 
   // --- Auto-Sync and Listeners ---
-  autoSyncToggle.addEventListener('change', (e) => {
-    autoSync = e.target.checked;
-    if (autoSync) scheduleSync(50);
-  });
+  if (autoSyncToggle) {
+    autoSyncToggle.addEventListener('change', (e) => {
+      autoSync = e.target.checked;
+      if (autoSync) scheduleSync(50);
+    });
+  }
 
   syncNowBtn.addEventListener('click', () => {
     scheduleSync(0);

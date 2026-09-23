@@ -24,8 +24,8 @@
 
     <!-- Main Content -->
     <main class="panel-main">
-      <!-- Active Document Section -->
-      <section class="card doc-card">
+      <!-- Active Document Section (Hidden) -->
+      <section class="card doc-card hidden" style="display: none;">
         <div class="card-header">
           <span class="card-title">Active Document</span>
           <span class="sync-indicator idle" id="syncIndicator">Idle</span>
@@ -36,8 +36,8 @@
         </div>
       </section>
 
-      <!-- Connected Mobile Devices -->
-      <section class="card devices-card">
+      <!-- Connected Mobile Devices (Hidden) -->
+      <section class="card devices-card hidden" style="display: none;">
         <div class="card-header">
           <span class="card-title">Connected Devices</span>
           <span class="badge" id="deviceCountBadge">0 Devices</span>
@@ -51,7 +51,8 @@
 
       <!-- Sync Controls -->
       <section class="card controls-card">
-        <div class="control-row">
+        <!-- Auto-Sync on Edit (Hidden) -->
+        <div class="control-row hidden" style="display: none;">
           <div class="control-label">
             <span>Auto-Sync on Edit</span>
             <small>Updates mobile display as you paint & design</small>

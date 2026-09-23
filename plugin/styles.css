@@ -432,3 +432,7 @@ input:checked + .slider:before {
 .btn-link:hover {
   color: #64b5f6;
 }
+
+.hidden {
+  display: none !important;
+}
