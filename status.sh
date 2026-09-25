@@ -17,9 +17,16 @@ if [ -n "$PID" ]; then
     PS_CONN=$(echo "$API_STATUS" | grep -o '"photoshopConnected":[^,]*' | cut -d: -f2)
     MOBILE_COUNT=$(echo "$API_STATUS" | grep -o '"mobileClientsCount":[^,]*' | cut -d: -f2)
     DOC_NAME=$(echo "$API_STATUS" | grep -o '"name":"[^"]*"' | head -1 | cut -d: -f2 | tr -d '"')
+    ADB_CONN=$(echo "$API_STATUS" | grep -o '"adb":{"available":[^}]*' | grep -o '"connected":[^,]*' | cut -d: -f2)
+    ADB_DEV=$(echo "$API_STATUS" | grep -o '"device":"[^"]*"' | head -1 | cut -d: -f2 | tr -d '"')
     echo " Photoshop:   Connected ($PS_CONN)"
     echo " Mobile Apps: $MOBILE_COUNT connected"
     echo " Active Doc:  $DOC_NAME"
+    if [ "$ADB_CONN" == "true" ]; then
+      echo " Android USB: Connected via ADB ($ADB_DEV) -> http://localhost:3890"
+    else
+      echo " Android USB: Waiting for USB connection"
+    fi
   fi
   echo ""
   echo " Recent Logs (logs/server.log):"

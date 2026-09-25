@@ -6,10 +6,11 @@ Real-time canvas preview plugin for **Adobe Photoshop 2026 / 2025 / 2024** that 
 
 ## Key Features
 
-- 🔌 **Direct USB Connection (No USB Debugging Required!)**:
-  - **Android**: Uses standard **USB Tethering** (Settings > Hotspot & tethering > USB tethering). No developer options or ADB required.
-  - **iPhone**: Uses **Personal Hotspot (USB Only)**. No developer certificates or Wi-Fi needed.
-  - Ultra-fast, zero-latency physical cable transmission.
+- 🔌 **100% Pure Physical USB Connection (Zero Wi-Fi or Internet Needed!)**:
+  - **Android (Instant ADB Tunnel)**: Plug in USB cable with USB Debugging enabled. The bridge automatically port-forwards to `http://localhost:3890` with zero network setup. Click **"Launch on Phone"** in the Photoshop panel to open Chrome instantly!
+  - **Android (USB Tethering - Zero Developer Mode)**: Settings > Hotspot & tethering > Toggle ON "USB tethering". Creates a direct peer-to-peer USB Ethernet link. Wi-Fi can be completely turned OFF!
+  - **iPhone (Personal Hotspot USB Only)**: Turn Wi-Fi OFF. Connect USB cable. Settings > Personal Hotspot > Turn ON ("USB Only"). Direct point-to-point USB cable link.
+  - Ultra-fast, zero-latency physical cable transmission with 0 network dependency.
 - 📱 **True Edge-to-Edge Borderless Fullscreen**:
   - **Android**: Fullscreen API (`navigationUI: "hide"`) completely eliminates the Android status bar and navigation bar (home/back buttons).
   - **iPhone**: PWA Standalone configuration (`apple-mobile-web-app-capable`) removes the Safari URL bar and bottom toolbar.
@@ -95,32 +96,35 @@ Photoshop / Adobe Creative Cloud will prompt you to install the plugin.
 
 ## Connecting Your Mobile Device Over USB
 
-### 🤖 Android Setup (Zero USB Debugging Needed!)
+### 🤖 Android Setup (Zero Wi-Fi Required!)
 
-1. Connect your Android phone to your Mac using a **USB cable**.
-2. On your Android phone, go to:
-   - **Settings** > **Network & internet** (or Connections) > **Hotspot & tethering**.
-3. Toggle **ON "USB tethering"**.
-4. Open **Google Chrome** on your phone and navigate to the URL shown in the terminal or scan the QR code (typically `http://<Your-Mac>.local:3890` or the USB tethering IP).
-5. Tap **"Enter Fullscreen Mode"**:
-   - The browser address bar, Android status bar, and Android navigation/home buttons will immediately hide!
-   - You now have a 100% immersive, borderless Photoshop preview.
+#### Option 1: Instant ADB Tunnel (Recommended)
+1. Turn ON **USB Debugging** on your phone (Settings > Developer options > USB Debugging).
+2. Connect your phone to your computer with a **USB cable**.
+3. In Photoshop, open **Plugins > Mobile USB Preview**. The panel will show **"Android USB Active (ADB Tunnel)"**.
+4. Click **"⚡ Launch on Phone"** (or open `http://localhost:3890` in Chrome on your phone, or scan the QR code).
+5. Chrome opens directly over the USB cable! Tap **"Enter Fullscreen Mode"** for borderless preview.
+
+#### Option 2: USB Tethering (Zero Developer Mode Needed)
+1. Connect your Android phone to your computer with a **USB cable**. (Wi-Fi can be completely OFF!)
+2. On your phone: **Settings > Hotspot & tethering > Turn ON "USB tethering"**.
+3. Open the detected direct USB address shown in the panel (e.g. `http://192.168.42.x:3890`) or scan the QR code.
+4. Tap **"Enter Fullscreen Mode"**.
 
 ---
 
-### 🍏 iPhone / iOS Setup
+### 🍏 iPhone / iOS Setup (Zero Wi-Fi Required!)
 
-1. Connect your iPhone to your Mac using a **USB cable**.
-2. On your iPhone, go to:
-   - **Settings** > **Personal Hotspot**.
-   - Turn Personal Hotspot ON and select **"USB Only"** (if prompted).
-3. Open **Safari** on your iPhone and go to the URL shown in the terminal or Photoshop panel (e.g. `http://<Your-Mac>.local:3890`).
-4. To remove all Safari borders and status bars:
+1. Turn **OFF Wi-Fi** in iPhone Control Center.
+2. Connect your iPhone to your Mac using a **USB cable**.
+3. On your iPhone:
+   - **Settings > Personal Hotspot > Turn ON** (choose **"USB Only"**).
+4. In Photoshop, the panel detects the iPhone USB link and displays the direct USB URL (e.g. `http://172.20.10.x:3890`).
+5. Open that URL in **Safari** (or scan the QR code).
+6. To enable true borderless edge-to-edge fullscreen:
    - Tap the Safari **Share** icon at the bottom.
    - Tap **"Add to Home Screen"**.
-   - Name it **"PS Preview"** and tap **Add**.
-5. Open the newly added **PS Preview** app from your iPhone Home Screen.
-   - It will open in true standalone mode with **zero Safari controls, zero toolbars, and edge-to-edge display**!
+   - Open the **PS Preview** app from your iPhone Home Screen.
 
 ---
 

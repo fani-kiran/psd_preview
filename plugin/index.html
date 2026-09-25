@@ -79,10 +79,16 @@
         </div>
       </section>
 
-      <!-- USB Quick Connect -->
+      <!-- Pure USB Connection (Zero Wi-Fi) -->
       <section class="card usb-card">
         <div class="card-header">
-          <span class="card-title">USB Connection (No Debugging)</span>
+          <span class="card-title">Pure USB Cable (Zero Wi-Fi)</span>
+        </div>
+
+        <!-- Live USB Status Indicator -->
+        <div class="usb-status-pill disconnected" id="usbStatusPill">
+          <span class="usb-pill-dot" id="usbPillDot"></span>
+          <span class="usb-pill-text" id="usbPillText">Waiting for USB Cable...</span>
         </div>
 
         <div class="usb-tabs">
@@ -92,43 +98,51 @@
 
         <!-- Android Guide -->
         <div class="tab-content active" id="androidTab">
+          <div class="usb-notice">⚡ <strong>Physical USB Cable</strong> — Zero Wi-Fi or Network Needed!</div>
           <ol class="steps-list">
-            <li>Connect Android to Mac with <strong>USB cable</strong>.</li>
-            <li>Go to <strong>Settings &gt; Hotspot &amp; tethering</strong>.</li>
-            <li>Turn <strong>ON &quot;USB tethering&quot;</strong>.</li>
-            <li>Open the link below in Chrome:</li>
+            <li>Connect your Android phone to Mac with the <strong>USB cable</strong>.</li>
+            <li>On your phone: Turn ON <strong>Settings &gt; Developer options &gt; USB Debugging</strong>.</li>
+            <li>Tap <strong>"Allow USB debugging"</strong> on your phone screen popup.</li>
+            <li>The panel turns <strong>GREEN</strong>! Click <strong>"Launch on Phone"</strong> or scan the QR code.</li>
           </ol>
         </div>
 
         <!-- iPhone Guide -->
         <div class="tab-content" id="iphoneTab">
+          <div class="usb-notice">⚡ <strong>Zero Wi-Fi Needed</strong> — Turn Wi-Fi completely OFF!</div>
           <ol class="steps-list">
             <li>Connect iPhone to Mac with <strong>USB cable</strong>.</li>
-            <li>Go to <strong>Settings &gt; Personal Hotspot</strong>.</li>
-            <li>Select <strong>&quot;USB Only&quot;</strong>.</li>
-            <li>Open link in Safari &amp; tap <strong>Share &gt; Add to Home Screen</strong>.</li>
+            <li>Go to <strong>Settings &gt; Personal Hotspot</strong> and turn <strong>ON</strong> (select <strong>"USB Only"</strong>).</li>
+            <li>Open the link below in Safari.</li>
+            <li>Tap <strong>Share &gt; Add to Home Screen</strong> for borderless fullscreen.</li>
           </ol>
         </div>
 
-        <!-- Connect URL and QR Box -->
+        <!-- Connect URL, Copy & Launch Buttons -->
         <div class="url-box">
-          <input type="text" id="connectUrlInput" readonly value="http://localhost:3890">
-          <button id="copyUrlBtn" class="btn-icon" title="Copy URL">
+          <input type="text" id="connectUrlInput" readonly value="Plug in USB &amp; enable Tethering or Debugging">
+          <button id="copyUrlBtn" class="btn-icon" title="Copy URL" style="display: none;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </button>
+          <button id="launchAndroidBtn" class="btn-launch" title="Instantly open in Chrome on connected Android phone">
+            ⚡ Launch on Phone
           </button>
         </div>
 
         <div class="qr-container">
-          <canvas id="qrCanvas" width="150" height="150"></canvas>
+          <div id="qrPlaceholder" class="qr-placeholder">
+            <span>Plug in phone via USB cable to generate QR code</span>
+          </div>
+          <canvas id="qrCanvas" width="150" height="150" style="display: none;"></canvas>
           <img id="qrImg" src="" alt="QR Code" style="display: none; width: 150px; height: 150px; border-radius: 4px; background: #fff;">
-          <div class="qr-caption">Scan with phone camera to open</div>
+          <div class="qr-caption">Waiting for USB cable connection...</div>
         </div>
       </section>
     </main>
 
     <!-- Footer -->
     <footer class="panel-footer">
-      <div class="footer-status" id="footerServerText">Bridge Server: 127.0.0.1:3890</div>
+      <div class="footer-status" id="footerServerText">USB Bridge: 127.0.0.1:3890</div>
       <button id="reconnectBridgeBtn" class="btn-link">Reconnect</button>
     </footer>
   </div>

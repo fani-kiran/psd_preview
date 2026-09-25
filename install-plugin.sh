@@ -4,6 +4,9 @@ set -e
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIR"
 
+# Ensure Android platform-tools & common Node paths are in PATH
+export PATH="$HOME/Library/Android/sdk/platform-tools:/opt/homebrew/bin:/usr/local/bin:$PATH"
+
 echo "=========================================================="
 echo "    Installing Mobile USB Preview Plugin for Photoshop    "
 echo "=========================================================="

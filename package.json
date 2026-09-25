@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node bridge-server/server.js",
     "package": "node scripts/package-plugin.js",
-    "icons": "node scripts/generate-icons.js"
+    "icons": "node scripts/generate-icons.js",
+    "build:dist": "bash scripts/build-distribution.sh"
   },
   "keywords": [
     "photoshop",

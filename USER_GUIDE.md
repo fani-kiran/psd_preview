@@ -16,10 +16,10 @@ A complete step-by-step guide on how to install, use, and manage the **Photoshop
 
 ## 1. Overview
 
-The **Photoshop Mobile Preview** suite connects Adobe Photoshop directly to your mobile phone (Android or iPhone) via a physical USB cable (or local Wi-Fi) with **zero latency** and **true borderless fullscreen**:
+The **Photoshop Mobile Preview** suite connects Adobe Photoshop directly to your mobile phone (Android or iPhone) via a physical USB cable with **zero Wi-Fi**, **zero latency**, and **true borderless fullscreen**:
 
 - **Photoshop UXP Plugin**: Captures your active canvas in real-time as you paint, move layers, or make edits.
-- **Bridge Server (Port 3890)**: A lightweight desktop background daemon that streams canvas frames to connected devices.
+- **Bridge Server (Port 3890)**: A lightweight desktop background daemon that manages ADB USB port forwarding and USB Ethernet links.
 - **Mobile Client Web App**: A zero-UI Progressive Web App that runs edge-to-edge on your phone with pinch-to-zoom and pan gestures.
 
 ---
@@ -75,34 +75,42 @@ A sleek panel titled **Mobile Preview** will open in your workspace. You can doc
 
 ---
 
-## 4. Connecting Your Phone (USB & Fullscreen)
+## 4. Connecting Your Phone (Pure USB Cable — Zero Wi-Fi)
 
-### 🤖 Android Setup (Zero ADB / Developer Mode Required)
+### 🤖 Android Setup (Zero Wi-Fi Needed!)
 
+#### Option A: Instant ADB Tunnel (Recommended — 1 Click!)
+1. Turn ON **USB Debugging** on your Android phone (**Settings > Developer options > USB Debugging**).
+2. Connect your Android phone to your computer with a **USB cable**.
+3. In Photoshop, open **Plugins > Mobile USB Preview**. The panel will show **"✓ Android USB Active (ADB Tunnel)"**.
+4. Click **"⚡ Launch on Phone"** (or scan the QR code). Chrome opens directly on your phone!
+5. Tap **"Enter Fullscreen Mode"** for 100% immersive preview.
+*(Note: Wi-Fi, Mobile Data, and Hotspot can all be completely OFF!)*
+
+#### Option B: USB Tethering (Zero Developer Mode Needed)
 1. Connect your Android phone to your computer using a **USB cable**.
 2. On your phone, open:
    - **Settings** > **Network & Internet** (or *Connections*) > **Hotspot & tethering**.
-3. Toggle **ON "USB tethering"**.
-4. Open **Google Chrome** on your phone.
-5. Scan the **QR Code** from the Photoshop panel (or type the URL shown in the panel).
-6. Tap the blue button: **"Enter Fullscreen Mode"**:
-   - The Android status bar and navigation/home buttons will disappear completely!
-   - You now have 100% pure canvas preview.
+3. Toggle **ON "USB tethering"**. (Wi-Fi can be completely OFF!)
+4. Open Google Chrome on your phone and open the detected direct USB URL or scan the QR Code.
+5. Tap **"Enter Fullscreen Mode"**.
 
 ---
 
-### 🍏 iPhone / iPad Setup (True Standalone Display)
+### 🍏 iPhone / iPad Setup (Zero Wi-Fi Needed!)
 
-1. Connect your iPhone to your Mac using a **Lightning / USB-C cable**.
-2. On your iPhone, open:
+1. Turn **OFF Wi-Fi** in iPhone Control Center.
+2. Connect your iPhone to your Mac using a **Lightning or USB-C cable**.
+3. On your iPhone, open:
    - **Settings** > **Personal Hotspot**.
-3. Toggle Personal Hotspot **ON** (select **"USB Only"** if prompted).
-4. Open **Safari** on your phone and open the URL or scan the QR Code.
-5. **To remove Safari's URL bar and navigation bar**:
+   - Toggle Personal Hotspot **ON** (select **"USB Only"** when prompted).
+4. The Photoshop panel will detect the iPhone USB link and display the direct USB URL (e.g. `http://172.20.10.x:3890`).
+5. Open **Safari** on your iPhone and open the URL or scan the QR Code.
+6. **To remove Safari's URL bar and navigation bar**:
    - Tap the Safari **Share** icon (square with arrow) at the bottom.
    - Scroll down and tap **"Add to Home Screen"**.
    - Name it **"PS Preview"** and tap **Add**.
-6. Open the new **PS Preview** icon from your home screen. It will open in true standalone fullscreen with zero browser borders!
+7. Open the new **PS Preview** icon from your home screen. It will open in true standalone fullscreen with zero browser borders!
 
 ---
 
@@ -158,8 +166,12 @@ The desktop bridge server runs silently on **port 3890**. If you ever shut it do
 ---
 
 ### Q3: My phone cannot load the link / QR Code page.
-- Make sure **USB Tethering** (Android) or **Personal Hotspot USB Only** (iPhone) is switched **ON** on your phone.
-- If using Wi-Fi instead of USB, make sure your computer and phone are connected to the same Wi-Fi network.
+- **For Android**:
+  - **Best Method**: Turn ON **USB Debugging** in Developer options. Plug in USB cable. The Photoshop panel will say "Android USB Active (ADB Tunnel)". Click **"Launch on Phone"** or open `http://localhost:3890`.
+  - **Alternative**: Go to Settings > Hotspot & tethering > turn ON **"USB tethering"**. Use the direct USB IP shown in the panel.
+- **For iPhone**:
+  - Turn **OFF Wi-Fi**. Connect USB cable. Go to Settings > Personal Hotspot > Turn ON ("USB Only"). Open the detected USB IP in Safari.
+- Remember: **Wi-Fi is NOT needed!** The preview streams 100% over the physical USB cable.
 
 ---
 

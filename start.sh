@@ -4,7 +4,26 @@ set -e
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIR"
 
+# Ensure Android platform-tools & common Node paths are in PATH
+export PATH="$HOME/Library/Android/sdk/platform-tools:/opt/homebrew/bin:/usr/local/bin:$PATH"
+
 mkdir -p "$DIR/logs"
+
+# Check if node is installed
+NODE_BIN=$(which node 2>/dev/null || true)
+if [ -z "$NODE_BIN" ]; then
+  if [ -x "/opt/homebrew/bin/node" ]; then
+    NODE_BIN="/opt/homebrew/bin/node"
+  elif [ -x "/usr/local/bin/node" ]; then
+    NODE_BIN="/usr/local/bin/node"
+  else
+    echo "=========================================================="
+    echo " [ERROR] Node.js is not installed on this Mac."
+    echo " Please install Node.js from: https://nodejs.org"
+    echo "=========================================================="
+    exit 1
+  fi
+fi
 
 # Check if node_modules are installed
 if [ ! -d "bridge-server/node_modules" ]; then
@@ -12,7 +31,6 @@ if [ ! -d "bridge-server/node_modules" ]; then
   cd bridge-server && npm install && cd ..
 fi
 
-NODE_BIN=$(which node || echo "/usr/local/bin/node")
 PLIST_SRC="$DIR/daemon/com.psdpreview.bridge.plist"
 PLIST_DST="$HOME/Library/LaunchAgents/com.psdpreview.bridge.plist"
 
@@ -71,7 +89,7 @@ cat <<EOF > "$PLIST_DST"
     <key>EnvironmentVariables</key>
     <dict>
         <key>PATH</key>
-        <string>$(dirname "$NODE_BIN"):/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <string>$(dirname "$NODE_BIN"):$HOME/Library/Android/sdk/platform-tools:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
     </dict>
 </dict>
 </plist>
@@ -84,17 +102,20 @@ launchctl load -w "$PLIST_DST"
 sleep 1.5
 
 if lsof -i :3890 >/dev/null 2>&1; then
-  LOCAL_IP=$(ipconfig getifaddr en0 2>/dev/null || echo "localhost")
   echo ""
-  echo " [SUCCESS] Server is running in the background FOREVER!"
+  echo " =========================================================="
+  echo "  [SUCCESS] USB Bridge Server Running (Zero Wi-Fi Needed!)"
+  echo " =========================================================="
   echo ""
   echo "  - Port:         3890"
-  echo "  - Mobile URL:   http://${LOCAL_IP}:3890"
+  echo "  - Android USB:  http://localhost:3890 (via USB Debugging / ADB)"
+  echo "  - iPhone USB:   Settings > Personal Hotspot > 'USB Only'"
+  echo "  - Network:      100% Offline Physical USB Cable Only"
   echo "  - Log File:     $DIR/logs/server.log"
-  echo "  - Auto-Restart: Enabled (Runs forever, revives on crash/reboot)"
+  echo "  - Auto-Restart: Enabled (Runs in background forever)"
   echo ""
-  echo " Zero Terminal Needed! You can safely CLOSE this terminal window."
-  echo " To stop anytime, run: ./stop.sh (or double click 'Stop Server.app')"
+  echo " Zero Terminal Needed! You can safely CLOSE this window."
+  echo " Open Photoshop > Plugins > Mobile USB Preview to view canvas."
   echo "=========================================================="
 else
   echo ""

@@ -2,6 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+const { execFile, execSync } = require('child_process');
 const { WebSocketServer, WebSocket } = require('ws');
 const QRCode = require('qrcode');
 let qrcodeTerminal = null;
@@ -26,6 +27,255 @@ let latestFrame = null; // Buffer or Base64 string of the last rendered document
 let psSockets = new Set();
 let mobileSockets = new Map(); // ws -> { id, deviceType, connectedAt }
 
+// -------------------------------------------------------------
+// ADB & Pure USB Tunnel Manager (Zero Wi-Fi Dependency)
+// -------------------------------------------------------------
+let adbPath = null;
+let adbState = {
+  available: false,
+  connected: false,
+  device: null,
+  serial: null,
+  url: null
+};
+let lastReversedSerial = null;
+
+function initAdb() {
+  if (process.env.ADB_PATH && fs.existsSync(process.env.ADB_PATH)) {
+    adbPath = process.env.ADB_PATH;
+    return adbPath;
+  }
+  const home = os.homedir();
+  const candidates = [
+    path.join(home, 'Library/Android/sdk/platform-tools/adb'),
+    path.join(home, 'Library/Android/sdk/platform-tools/adb.exe'),
+    '/opt/homebrew/bin/adb',
+    '/usr/local/bin/adb',
+    path.join(process.env.LOCALAPPDATA || '', 'Android/Sdk/platform-tools/adb.exe'),
+    path.join(process.env.PROGRAMFILES || '', 'Android/android-sdk/platform-tools/adb.exe')
+  ];
+  for (const c of candidates) {
+    if (c && fs.existsSync(c)) {
+      adbPath = c;
+      return adbPath;
+    }
+  }
+  try {
+    const whichCmd = process.platform === 'win32' ? 'where adb' : 'which adb';
+    const out = execSync(whichCmd, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'] }).trim();
+    if (out) {
+      const first = out.split(/\r?\n/)[0].trim();
+      if (fs.existsSync(first)) {
+        adbPath = first;
+        return adbPath;
+      }
+    }
+  } catch (e) {}
+  return null;
+}
+
+function checkAdbDevices() {
+  if (!adbPath) {
+    adbPath = initAdb();
+    if (!adbPath) return;
+  }
+  adbState.available = true;
+
+  execFile(adbPath, ['devices', '-l'], { timeout: 2000 }, (err, stdout) => {
+    if (err || !stdout) {
+      if (adbState.connected) {
+        adbState.connected = false;
+        adbState.device = null;
+        adbState.serial = null;
+        adbState.url = null;
+        lastReversedSerial = null;
+        broadcastUsbStatusToPhotoshop();
+      }
+      return;
+    }
+
+    const lines = stdout.split(/\r?\n/);
+    let activeDev = null;
+    let unauthorizedDev = false;
+
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (!line) continue;
+      const parts = line.split(/\s+/);
+      const serial = parts[0];
+      const status = parts[1];
+
+      if (status === 'device') {
+        const modelMatch = line.match(/model:([^\s]+)/i);
+        const model = modelMatch ? modelMatch[1].replace(/_/g, ' ') : serial;
+        activeDev = { serial, model };
+        break;
+      } else if (status === 'unauthorized') {
+        unauthorizedDev = true;
+      }
+    }
+
+    adbState.unauthorized = unauthorizedDev;
+
+    if (activeDev) {
+      const isNew = !adbState.connected || adbState.serial !== activeDev.serial;
+      adbState.connected = true;
+      adbState.device = activeDev.model;
+      adbState.serial = activeDev.serial;
+      adbState.url = `http://localhost:${PORT}`;
+
+      if (isNew || lastReversedSerial !== activeDev.serial) {
+        lastReversedSerial = activeDev.serial;
+        console.log(`[ADB USB] Android device detected: ${activeDev.model} (${activeDev.serial}). Reversing port ${PORT}...`);
+        execFile(adbPath, ['-s', activeDev.serial, 'reverse', `tcp:${PORT}`, `tcp:${PORT}`], { timeout: 3000 }, (revErr) => {
+          if (revErr) {
+            console.warn(`[ADB USB] Reverse error: ${revErr.message}`);
+          } else {
+            console.log(`[ADB USB] ✓ Port ${PORT} successfully reversed to Android device over physical USB cable!`);
+            console.log(`[ADB USB] Pure USB preview active at: http://localhost:${PORT} (Zero Wi-Fi needed!)`);
+          }
+          broadcastUsbStatusToPhotoshop();
+        });
+      }
+    } else {
+      if (adbState.connected) {
+        console.log(`[ADB USB] Android device disconnected.`);
+        adbState.connected = false;
+        adbState.device = null;
+        adbState.serial = null;
+        adbState.url = null;
+        lastReversedSerial = null;
+        broadcastUsbStatusToPhotoshop();
+      } else if (unauthorizedDev) {
+        broadcastUsbStatusToPhotoshop();
+      }
+    }
+  });
+}
+
+// -------------------------------------------------------------
+// Pure USB Network Interface Detection (Excludes Wi-Fi)
+// -------------------------------------------------------------
+let cachedWifiDevices = new Set();
+let lastWifiCheck = 0;
+
+function getWifiDevices() {
+  const now = Date.now();
+  if (now - lastWifiCheck < 10000 && cachedWifiDevices.size > 0) {
+    return cachedWifiDevices;
+  }
+  cachedWifiDevices.clear();
+  if (process.platform === 'darwin') {
+    try {
+      const out = execSync('networksetup -listallhardwareports', { encoding: 'utf8', timeout: 2000, stdio: ['pipe', 'pipe', 'ignore'] });
+      const blocks = out.split(/\n\s*\n/);
+      for (const block of blocks) {
+        const portMatch = block.match(/Hardware Port:\s*(.+)/i);
+        const devMatch = block.match(/Device:\s*([^\s]+)/i);
+        if (portMatch && devMatch) {
+          const port = portMatch[1].trim();
+          const dev = devMatch[1].trim();
+          if (/wi-fi|airport|wireless/i.test(port)) {
+            cachedWifiDevices.add(dev);
+          }
+        }
+      }
+    } catch (e) {}
+  }
+  lastWifiCheck = now;
+  return cachedWifiDevices;
+}
+
+function detectPhysicalUsbDevices() {
+  if (process.platform !== 'darwin') return null;
+  try {
+    const out = execSync('ioreg -p IOUSB -w0 -l', { encoding: 'utf8', timeout: 1500, stdio: ['pipe', 'pipe', 'ignore'] });
+    if (/samsung/i.test(out)) return 'Samsung Android';
+    if (/google|pixel/i.test(out)) return 'Google Pixel';
+    if (/oneplus|xiaomi|oppo|vivo|motorola|huawei|sony/i.test(out)) return 'Android Device';
+    if (/iphone|ipad|ipod/i.test(out)) return 'iPhone / iPad';
+    if (/android/i.test(out)) return 'Android Device';
+  } catch (e) {}
+  return null;
+}
+
+function getNetworkInfo() {
+  const interfaces = os.networkInterfaces();
+  const wifiDevs = getWifiDevices();
+  const physicalDev = detectPhysicalUsbDevices();
+  const results = {
+    adb: { ...adbState },
+    usbAndroid: [],
+    usbIphone: [],
+    usbLinkLocal: [],
+    hasUsbConnection: false,
+    physicalDevice: physicalDev,
+    recommendedUrl: null,
+    port: PORT
+  };
+
+  for (const [name, addrs] of Object.entries(interfaces)) {
+    // Wi-Fi interfaces are strictly excluded for pure USB cable operation
+    if (wifiDevs.has(name)) {
+      continue;
+    }
+
+    for (const addr of addrs) {
+      if (addr.family === 'IPv4' && !addr.internal) {
+        const ip = addr.address;
+        const entry = { interface: name, ip, url: `http://${ip}:${PORT}` };
+
+        // iPhone USB Personal Hotspot (172.20.10.x or interface name includes iphone/appleusbncm)
+        if (ip.startsWith('172.20.10.') || name.toLowerCase().includes('iphone')) {
+          results.usbIphone.push(entry);
+        }
+        // Android USB Tethering subnets (192.168.42.x, 192.168.43.x, 192.168.44.x, or rndis/ncm/usb interface)
+        else if (
+          ip.startsWith('192.168.42.') ||
+          ip.startsWith('192.168.43.') ||
+          ip.startsWith('192.168.44.') ||
+          ip.startsWith('192.168.45.') ||
+          ip.startsWith('192.168.49.') ||
+          ip.startsWith('192.168.50.') ||
+          ip.startsWith('192.168.137.') ||
+          name.toLowerCase().includes('rndis') ||
+          name.toLowerCase().includes('ncm') ||
+          name.toLowerCase().includes('usb')
+        ) {
+          results.usbAndroid.push(entry);
+        }
+        // Link-local direct USB cable connection
+        else if (ip.startsWith('169.254.')) {
+          results.usbLinkLocal.push(entry);
+        }
+        // Other non-Wi-Fi physical adapters (e.g. Ethernet adapter created by USB tethering)
+        else if (!name.startsWith('utun') && !name.startsWith('bridge') && !name.startsWith('awdl') && !name.startsWith('llw') && !name.startsWith('anpi')) {
+          results.usbAndroid.push(entry);
+        }
+      }
+    }
+  }
+
+  results.hasUsbConnection = (
+    results.adb.connected ||
+    results.usbAndroid.length > 0 ||
+    results.usbIphone.length > 0
+  );
+
+  if (results.adb.connected) {
+    results.recommendedUrl = `http://localhost:${PORT}`;
+  } else if (results.usbAndroid.length > 0) {
+    results.recommendedUrl = results.usbAndroid[0].url;
+  } else if (results.usbIphone.length > 0) {
+    results.recommendedUrl = results.usbIphone[0].url;
+  } else {
+    // DO NOT set localhost:3890 if ADB is not connected! It causes ERR_CONNECTION_REFUSED on mobile devices.
+    results.recommendedUrl = null;
+  }
+
+  return results;
+}
+
 // MIME types for static files
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -41,39 +291,6 @@ const MIME_TYPES = {
   '.mp4': 'video/mp4',
   '.webm': 'video/webm'
 };
-
-// Helper to find relevant network interfaces (USB Tethering, Hotspot, Local)
-function getNetworkInfo() {
-  const interfaces = os.networkInterfaces();
-  const results = {
-    usbAndroid: [],
-    usbIphone: [],
-    localIps: [],
-    hostname: `${os.hostname().replace(/\.local$/, '')}.local`
-  };
-
-  for (const [name, addrs] of Object.entries(interfaces)) {
-    for (const addr of addrs) {
-      if (addr.family === 'IPv4' && !addr.internal) {
-        const ip = addr.address;
-        const entry = { interface: name, ip, url: `http://${ip}:${PORT}` };
-
-        // Common Android USB Tethering subnets
-        if (ip.startsWith('192.168.42.') || ip.startsWith('192.168.43.') || name.toLowerCase().includes('rndis') || name.toLowerCase().includes('ncm')) {
-          results.usbAndroid.push(entry);
-        }
-        // iPhone USB Personal Hotspot subnet
-        else if (ip.startsWith('172.20.10.')) {
-          results.usbIphone.push(entry);
-        } else {
-          results.localIps.push(entry);
-        }
-      }
-    }
-  }
-
-  return results;
-}
 
 // HTTP Server
 const server = http.createServer((req, res) => {
@@ -112,8 +329,59 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // Launch on Android Chrome via ADB
+  if (pathname === '/api/adb-launch') {
+    if (!adbPath) adbPath = initAdb();
+    if (!adbPath) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: 'ADB executable not found on this machine' }));
+      return;
+    }
+    const targetUrl = parsedUrl.searchParams.get('url') || `http://localhost:${PORT}`;
+    const cmdArgs = adbState.serial
+      ? ['-s', adbState.serial, 'shell', 'am', 'start', '-a', 'android.intent.action.VIEW', '-d', targetUrl]
+      : ['shell', 'am', 'start', '-a', 'android.intent.action.VIEW', '-d', targetUrl];
+
+    execFile(adbPath, cmdArgs, { timeout: 4000 }, (err, stdout) => {
+      if (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      } else {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, message: 'Launched in Android browser over USB', output: stdout }));
+      }
+    });
+    return;
+  }
+
+  // Trigger manual ADB reverse
+  if (pathname === '/api/adb-reverse') {
+    if (!adbPath) adbPath = initAdb();
+    if (!adbPath) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: 'ADB not found' }));
+      return;
+    }
+    const cmdArgs = adbState.serial
+      ? ['-s', adbState.serial, 'reverse', `tcp:${PORT}`, `tcp:${PORT}`]
+      : ['reverse', `tcp:${PORT}`, `tcp:${PORT}`];
+
+    execFile(adbPath, cmdArgs, { timeout: 3000 }, (err) => {
+      if (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      } else {
+        broadcastUsbStatusToPhotoshop();
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, url: `http://localhost:${PORT}` }));
+      }
+    });
+    return;
+  }
+
   if (pathname === '/api/qr') {
-    const text = parsedUrl.searchParams.get('text') || `http://${getNetworkInfo().hostname}:${PORT}`;
+    const net = getNetworkInfo();
+    const text = parsedUrl.searchParams.get('text') || net.recommendedUrl || `http://localhost:${PORT}`;
     QRCode.toBuffer(text, { margin: 2, width: 260, errorCorrectionLevel: 'M' }, (err, buffer) => {
       if (err) {
         res.writeHead(500, { 'Content-Type': 'text/plain' });
@@ -207,14 +475,15 @@ wss.on('connection', (ws, req, pathname) => {
     psSockets.add(ws);
     console.log(`[Photoshop] Plugin connected. Active PS clients: ${psSockets.size}`);
 
-    // Notify Photoshop of current mobile client count
+    // Notify Photoshop of current mobile client count and USB status
     broadcastMobileCountToPhotoshop();
+    broadcastUsbStatusToPhotoshop();
 
     ws.on('message', (message, isBinary) => {
       handlePhotoshopMessage(message, isBinary, ws);
     });
 
-    ws.on('close', (code, reason) => {
+    ws.on('close', (code) => {
       psSockets.delete(ws);
       console.log(`[Photoshop] Plugin disconnected (code: ${code}). Remaining PS clients: ${psSockets.size}`);
       if (psSockets.size === 0) {
@@ -231,9 +500,9 @@ wss.on('connection', (ws, req, pathname) => {
   } else {
     // Mobile client
     const clientId = `mob_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
-    let deviceType = 'Mobile Browser';
-    if (/iPhone|iPad|iPod/i.test(userAgent)) deviceType = 'iPhone / iOS';
-    else if (/Android/i.test(userAgent)) deviceType = 'Android';
+    let deviceType = 'Mobile Browser (USB)';
+    if (/iPhone|iPad|iPod/i.test(userAgent)) deviceType = 'iPhone / iOS (USB)';
+    else if (/Android/i.test(userAgent)) deviceType = 'Android (USB)';
 
     const clientInfo = {
       id: clientId,
@@ -241,7 +510,7 @@ wss.on('connection', (ws, req, pathname) => {
       connectedAt: new Date().toISOString()
     };
     mobileSockets.set(ws, clientInfo);
-    console.log(`[Mobile] ${deviceType} connected (${clientId}). Total mobile clients: ${mobileSockets.size}`);
+    console.log(`[Mobile] ${deviceType} connected over USB (${clientId}). Total mobile clients: ${mobileSockets.size}`);
 
     // Send welcome payload with document metadata and latest cached frame
     ws.send(JSON.stringify({
@@ -252,7 +521,6 @@ wss.on('connection', (ws, req, pathname) => {
     }));
 
     if (latestFrame) {
-      // Send latest image immediately so screen fills right away
       if (typeof latestFrame === 'string') {
         ws.send(JSON.stringify({
           type: 'frame',
@@ -261,7 +529,6 @@ wss.on('connection', (ws, req, pathname) => {
           document: currentDocument
         }));
       } else {
-        // Binary buffer
         ws.send(latestFrame, { binary: true });
       }
     }
@@ -291,12 +558,10 @@ wss.on('connection', (ws, req, pathname) => {
 
 function handlePhotoshopMessage(message, isBinary, ws) {
   if (isBinary) {
-    // Direct binary JPEG/PNG frame from Photoshop
     latestFrame = message;
     currentDocument.hasImage = true;
     currentDocument.lastUpdated = Date.now();
 
-    // Broadcast binary to all mobile clients
     for (const [clientWs] of mobileSockets.entries()) {
       if (clientWs.readyState === WebSocket.OPEN) {
         clientWs.send(message, { binary: true });
@@ -326,7 +591,6 @@ function handlePhotoshopMessage(message, isBinary, ws) {
         };
       }
 
-      // Broadcast to all connected mobile clients
       const outgoing = JSON.stringify({
         type: 'frame',
         format: payload.format || 'jpeg',
@@ -391,7 +655,20 @@ function broadcastMobileCountToPhotoshop() {
   }
 }
 
-// Error Resilience & Forever Daemon Protection
+function broadcastUsbStatusToPhotoshop() {
+  const net = getNetworkInfo();
+  const msg = JSON.stringify({
+    type: 'usb_status',
+    network: net
+  });
+  for (const ws of psSockets) {
+    if (ws.readyState === WebSocket.OPEN) {
+      ws.send(msg);
+    }
+  }
+}
+
+// Error Resilience & Port Protection
 server.on('error', (err) => {
   if (err.code === 'EADDRINUSE') {
     console.error(`[Server Error] Port ${PORT} is currently in use. Will retry in 3 seconds...`);
@@ -408,61 +685,56 @@ process.on('uncaughtException', (err) => {
   console.error('[Process Uncaught Exception]', err);
 });
 
-process.on('unhandledRejection', (reason, promise) => {
+process.on('unhandledRejection', (reason) => {
   console.error('[Process Unhandled Rejection]', reason);
 });
 
 // Start server
 server.listen(PORT, '0.0.0.0', () => {
+  initAdb();
+  checkAdbDevices();
+  // Poll ADB devices and USB interfaces every 2.5 seconds
+  setInterval(checkAdbDevices, 2500);
+
   const netInfo = getNetworkInfo();
   console.log('\n================================================================');
-  console.log('       PHOTOSHOP MOBILE PREVIEW - USB BRIDGE SERVER             ');
+  console.log('       PHOTOSHOP MOBILE PREVIEW - PURE USB CABLE MODE           ');
   console.log('================================================================');
-  console.log(` Server running on port ${PORT}`);
-  console.log('\n--- USB CONNECTION OPTIONS (No USB Debugging Needed!) ---');
+  console.log(` Server running on port ${PORT} (0.0.0.0:${PORT})`);
+  console.log(' [Network Independence] ZERO Wi-Fi or Internet required!\n');
 
-  let primaryUrl = `http://${netInfo.hostname}:${PORT}`;
-
-  if (netInfo.usbAndroid.length > 0) {
-    console.log('\n[Android USB Tethering Detected]:');
-    netInfo.usbAndroid.forEach(entry => {
-      console.log(`  -> Open in Android Chrome: ${entry.url}`);
-      primaryUrl = entry.url;
-    });
+  console.log('--- 🤖 ANDROID USB CONNECTION ---');
+  if (adbState.connected) {
+    console.log(`  [ADB Active] Connected to ${adbState.device} via physical USB!`);
+    console.log(`  -> Open in Android Chrome: http://localhost:${PORT}`);
   } else {
-    console.log('\n[Android USB - How to Connect]:');
-    console.log('  1. Connect USB cable from Android phone to Mac.');
-    console.log('  2. On Android, go to Settings > Network & internet > Hotspot & tethering.');
-    console.log('  3. Turn ON "USB tethering". (No USB debugging needed!)');
-    console.log(`  4. Open: http://${netInfo.hostname}:${PORT} in Chrome.`);
+    console.log('  Mode 1 (Instant): Connect USB with USB Debugging enabled.');
+    console.log(`         Auto-reverses to: http://localhost:${PORT}`);
+    console.log('  Mode 2 (No Developer Mode): Settings > Hotspot & tethering > USB Tethering.');
+    if (netInfo.usbAndroid.length > 0) {
+      netInfo.usbAndroid.forEach(entry => {
+        console.log(`         Detected USB IP: ${entry.url}`);
+      });
+    }
   }
 
+  console.log('\n--- 🍏 IPHONE USB CONNECTION ---');
+  console.log('  1. Connect iPhone with USB cable. (Wi-Fi can be OFF)');
+  console.log('  2. On iPhone: Settings > Personal Hotspot > Turn ON ("USB Only").');
   if (netInfo.usbIphone.length > 0) {
-    console.log('\n[iPhone USB Hotspot Detected]:');
     netInfo.usbIphone.forEach(entry => {
-      console.log(`  -> Open in iPhone Safari: ${entry.url}`);
-      primaryUrl = entry.url;
+      console.log(`  -> Detected iPhone USB: ${entry.url}`);
     });
   } else {
-    console.log('\n[iPhone USB - How to Connect]:');
-    console.log('  1. Connect USB cable from iPhone to Mac.');
-    console.log('  2. On iPhone, go to Settings > Personal Hotspot and choose "USB Only".');
-    console.log(`  3. Open: http://${netInfo.hostname}:${PORT} in Safari.`);
-    console.log('  4. Tap Share > "Add to Home Screen" for true borderless fullscreen.');
+    console.log('  3. Open detected USB URL in Safari & tap "Add to Home Screen".');
   }
 
-  if (netInfo.localIps.length > 0) {
-    console.log('\n[Local / Wi-Fi Fallback URLs]:');
-    netInfo.localIps.forEach(entry => {
-      console.log(`  -> ${entry.interface}: ${entry.url}`);
-    });
-  }
-
-  console.log(`\n[Direct URL]: ${primaryUrl}`);
+  const primaryUrl = netInfo.recommendedUrl || `http://localhost:${PORT}`;
+  console.log(`\n[Active Direct USB URL]: ${primaryUrl}`);
 
   QRCode.toString(primaryUrl, { type: 'terminal', small: true }, (err, str) => {
     if (!err && str) {
-      console.log('\n[Scan with Phone Camera to Open]:');
+      console.log('\n[Scan with Phone Camera to Open over USB]:');
       console.log(str);
     }
   });
